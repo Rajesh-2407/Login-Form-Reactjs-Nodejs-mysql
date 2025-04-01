@@ -1,0 +1,81 @@
+/* Gold & Black Theme */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000; /* Black Background */
+}
+
+.register-box {
+    background: #111; /* Dark Background */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); /* Gold Glow */
+    width: 320px;
+    text-align: center;
+    color: #ffd700; /* Gold Text */
+}
+
+h2 {
+    margin-bottom: 1.5rem;
+    color: #ffd700; /* Gold Heading */
+    font-size: 24px;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #ffd700; /* Gold Labels */
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid #ffd700; /* Gold Border */
+    border-radius: 4px;
+    background: transparent;
+    color: #fff;
+    outline: none;
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 215, 0, 0.6); /* Light Gold Placeholder */
+}
+
+.register-btn {
+    width: 100%;
+    padding: 0.7rem;
+    background-color: #ffd700; /* Gold Button */
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.register-btn:hover {
+    background-color: #b29500; /* Darker Gold */
+}
+
+.login-text {
+    margin-top: 1rem;
+    color: #ffd700;
+}
+
+.login-link {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
