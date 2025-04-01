@@ -1,75 +1,79 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './Register.css';
 
 const Register = () => {
-    const [values, setValues] = useState({
-        username: '',
-        email: '',
-        password: ''
-    });
+    const [values, setValues] = useState({ username: '', email: '', password: '' });
     const navigate = useNavigate();
 
+    // Handle input changes
     const handleChanges = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
     };
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validation Check
+        if (!values.username || !values.email || !values.password) {
+            toast.error('Please fill in all fields!', { position: "top-center", autoClose: 2000, hideProgressBar: true });
+            return;
+        }
+
+        if (values.password.length < 5) {
+            toast.error('Password must be at least 5 characters long!', { position: "top-center", autoClose: 2000, hideProgressBar: true });
+            return;
+        }
+
         try {
-            const response = await axios.post('http://localhost:3000/auth/register', values);
-            if (response.status === 201) {
-                navigate('/login');
+            const response = await axios.post('http://localhost:3000/auth/register', {
+                username: values.username,
+                email: values.email,
+                password: values.password,
+            });
+
+            if (response.status >= 200 && response.status < 300) {
+                toast.success('Registration Successful!...', { position: "top-center", autoClose: 2000, hideProgressBar: true });
+                
+                // Redirect to login after success
+                setTimeout(() => navigate('/login'), 2500);
+            } else {
+                throw new Error('Unexpected response from server');
             }
         } catch (err) {
-            console.log(err.message);
+            console.error('Registration Error:', err);
+            toast.error(err.response?.data?.message || 'Registration Failed! Try again.', { position: "top-center", autoClose: 2000, hideProgressBar: true });
         }
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 p-4">
-            <div className="bg-white shadow-2xl rounded-xl px-8 py-8 w-full max-w-md">
-                <h2 className="text-3xl font-extrabold text-center text-blue-600 mb-6">Create an Account</h2>
+        <div className="register-container">
+            <div className="register-box">
+                <h2>Register</h2>
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-5">
-                        <label htmlFor="username" className="block text-gray-700 font-semibold mb-1">Username</label>
-                        <input
-                            type="text"
-                            placeholder="Enter Username"
-                            className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                            name="username"
-                            onChange={handleChanges}
-                        />
+                    <div className="input-group">
+                        <label>Username</label>
+                        <input type="text" placeholder="Enter Username" name="username" value={values.username} onChange={handleChanges} />
                     </div>
-                    <div className="mb-5">
-                        <label htmlFor="email" className="block text-gray-700 font-semibold mb-1">Email</label>
-                        <input
-                            type="email"
-                            placeholder="Enter Email"
-                            className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                            name="email"
-                            onChange={handleChanges}
-                        />
+                    <div className="input-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="Enter Email" name="email" value={values.email} onChange={handleChanges} />
                     </div>
-                    <div className="mb-5">
-                        <label htmlFor="password" className="block text-gray-700 font-semibold mb-1">Password</label>
-                        <input
-                            type="password"
-                            placeholder="Enter Password"
-                            className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                            name="password"
-                            onChange={handleChanges}
-                        />
+                    <div className="input-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Enter Password" name="password" value={values.password} onChange={handleChanges} />
                     </div>
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold text-lg transition duration-200">
-                        Register
-                    </button>
+                    <button type="submit" className="register-btn">Register</button>
                 </form>
-                <div className="text-center mt-5 text-gray-700">
-                    <span>Already have an account? </span>
-                    <Link to='/login' className="text-purple-500 hover:text-purple-700 font-semibold transition duration-200">Login</Link>
-                </div>
+                <p className="login-text">
+                    Already have an account? <Link to='/login' className="login-link">Login</Link>
+                </p>
             </div>
+            <ToastContainer />
         </div>
     );
 };
